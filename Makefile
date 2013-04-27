@@ -1,0 +1,31 @@
+COMPILER = ocamlc
+COMP_OPTIIONS = -c
+
+LEXER = LEXLOL
+PARSER = PARSELOL
+
+all: LOLCODEast.cmo PARSELOL.cmo LEXLOL.cmo EXECLOL.cmo
+clean:
+	-rm *.cmo *.mli *.cmi
+
+LOLCODEast.cmo: LOLCODEast.ml
+	$(COMPILER) $(COM_OPTIONS) LOLCODEast.ml
+
+PARSELOL.cmo: PARSELOL.ml PARSELOL.mli LOLCODEast.cmo
+	$(COMPILER) $(COMP_OPTIONS) PARSELOL.mli
+	$(COMPILER) $(COMP_OPTIONS) PARSELOL.ml
+
+PARSELOL.mli: PARSELOL.mly
+	ocamlyacc -v PARSELOL.mly
+	
+PARSELOL.ml: PARSELOL.mly
+	ocamlyacc -v PARSELOL.mly
+
+LEXLOL.cmo: LEXLOL.ml
+	$(COMPILER) $(COMPILER_OPTS) LEXLOL.ml
+
+LEXLOL.ml: LEXLOL.mll
+	ocamllex LEXLOL.mll
+
+EXECLOL.cmo: EXECLOL.ml
+	$(COMPILER) $(COMPILER_OPTS) EXECLOL.ml
