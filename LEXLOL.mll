@@ -22,6 +22,7 @@ rule tokenize = parse
     | "KTHXBYE"{KTHXBYE_T}
     | "AN" {AN_T}
     | "YR" {YR_T}
+    | "MAH" {MAH_T}
     | "ITZ" {ITZ_T}
     | "MKAY" {MKAY_T}
     | "NUMBR" {TYPENAME_T(NUMBR_L)}
@@ -30,7 +31,9 @@ rule tokenize = parse
     | "YARN" {TYPENAME_T(YARN_L)}
     | "NOOB" {TYPENAME_T(NOOB_L)}
     |  endlines* {LINEBREAK_T}
-    | "...\r" | "...\n" | "…\r" | "…\n" {tokenize lexbuf (*ignore*)} (*Line continuation*)
+    | ("..." | "..." | "…" | "…") endlines {tokenize lexbuf (*ignore*)} (*Line continuation*)
+    | "BTW" ([^ '\n' '\r'])* endlines {tokenize lexbuf (*one-line comment; ignore*)}
+    | "OBTW" (_)* "TLDR" {tokenize lexbuf (*block comment; ignore*)}
     | whitespace {tokenize lexbuf (*ignore*)}
     (*Statement keywords*)
     | "I HAS A " {I_HAS_A_T}
@@ -42,6 +45,9 @@ rule tokenize = parse
     | "IM IN YR" {IM_IN_YR_T}
     | "IM OUTTA YR" {IM_OUTTA_YR_T}
     | "GTFO" {GTFO_T}
+    | "HOW DUZ I" {HOW_DUZ_I_T}
+    | "IF U SAY SO" {IF_U_SAY_SO_T}
+    | "FOUND YR" {FOUND_YR_T}
     (*Expression keywords*)
     | "MAEK" {MAEK_T}
     | "A" {A_T}

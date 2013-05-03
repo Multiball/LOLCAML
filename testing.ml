@@ -5,8 +5,6 @@
 
 open LOLCODEast
 
-let maxbuf = 1024
-
 let string_of_value (v:value) =
     match v with
           NUMBR i -> ("NUMBR("^(string_of_int i)^")")
@@ -28,8 +26,10 @@ let lex_and_parse s = PARSELOL.program LEXLOL.tokenize (Lexing.from_string s)
 
 let run prog = match prog with
       PROGRAM progl -> 
-        let result = (EXECLOL.execstmtlis progl [] NOOB) in 
-            print_string ("Environoment:"^(string_of_env (fst result))^"|IT:"^(string_of_value (snd result))^"\n")            
+        let (result_env,result_funtable,result_it) = (EXECLOL.execstmtlis progl [] [] NOOB) in 
+            print_string ("Environoment:"^(string_of_env  result_env)^"|IT:"^(string_of_value result_it)^"\n")            
+
+let emptyfunc = []
 
 let exec_file  =
     (try
@@ -37,7 +37,8 @@ let exec_file  =
             let prog = PARSELOL.program LEXLOL.tokenize (Lexing.from_channel file) in
                 match prog with
                     PROGRAM progl ->
-                        let result = (EXECLOL.execstmtlis progl [] NOOB) in
-                            print_string ("Environoment:"^(string_of_env (fst result))^"|IT:"^(string_of_value (snd result))^"\n")
+                        let (result_env,result_funtable,result_it) = (EXECLOL.execstmtlis progl [] [] NOOB) in 
+                            print_string ("Environoment:"^(string_of_env  result_env)^"|IT:"^(string_of_value result_it)^"\n")            
    with Sys_error _ -> print_string ("Unable to open file") )
+
 

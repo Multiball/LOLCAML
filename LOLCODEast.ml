@@ -9,7 +9,7 @@ and stmt = ORLY of stmt list * stmt list (*stmt is executed when true*)
     | IM_IN_YR_TIL of ident * stmt list * loopexp * exp
     | IM_IN_YR_WILE of ident * stmt list * loopexp * exp
     | WTF of switchblock list
-    | FUNKSHUN_DEF of ident * stmt list
+    | FUNKSHUN_DEF of funkshun
     | EXP of exp
     | GTFO
     | FOUND_YR of exp
@@ -34,7 +34,7 @@ and exp =
     | ANY_OF of exp list
     | ALL_OF of exp list
     | SMOOSH of exp list
-    | FUNKSHUN_CALL of ident * exp list
+    | FUNKSHUN_CALL of ident * (exp list)
 
 and value = NUMBR of int
     | NUMBAR of float
@@ -51,6 +51,8 @@ and loopexp = UPPIN
 and typename = TROOF_L | NUMBR_L | NUMBAR_L | YARN_L | NOOB_L
 
 and ident = string
+
+and funkshun = ident * ident list * stmt list (*function name, argument names, function body*)
 
 and condblock = exp * stmt list (* serves as 'MEBBE' and  'NO WAI'*)
 

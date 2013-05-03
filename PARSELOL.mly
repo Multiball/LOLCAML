@@ -22,7 +22,7 @@ exception ReservedWord of string
 
     /* statement-related*/
     I_HAS_A_T R_T ITZ_T IS_NOW_A_T 
-    HOW_DUZ_I_T IF_U_SAY_SO_T MAEK_T
+    HOW_DUZ_I_T IF_U_SAY_SO_T FOUND_YR_T MAEK_T
 
     /* control flow-related */
     IM_IN_YR_T IM_OUTTA_YR_T TIL_T WILE_T ORLY_T YA_RLY_T NO_WAI_T
@@ -60,11 +60,11 @@ statement:
     | loop {$1}
     | GTFO_T LINEBREAK_T {GTFO}
     /*Currently only if-else. TODO: add elseif*/
-    | ORLY_T LINEBREAK_T YA_RLY_T statements OIC_T LINEBREAK_T {ORLY ($4, [])}
-    | ORLY_T LINEBREAK_T YA_RLY_T statements NO_WAI_T LINEBREAK_T statements OIC_T LINEBREAK_T { ORLY ($4,$7)}
-    /* TODO: Implement functions
-    | HOW_DUZ_I_T IDENT_T arglist LINEBREAK_T funstatements IF_U_SAY_SO_T LINEBREAK_T {FUNKSHUN_DEF ($2, $3, $4)}
-    */
+    | ORLY_T LINEBREAK_T YA_RLY_T LINEBREAK_T statements OIC_T LINEBREAK_T {ORLY ($5, [])}
+    | ORLY_T LINEBREAK_T NO_WAI_T LINEBREAK_T statements OIC_T LINEBREAK_T {ORLY ([], $5)}
+    | ORLY_T LINEBREAK_T YA_RLY_T LINEBREAK_T statements NO_WAI_T LINEBREAK_T statements OIC_T LINEBREAK_T { ORLY ($5,$8)}
+    | HOW_DUZ_I_T IDENT_T arglist statements IF_U_SAY_SO_T LINEBREAK_T {FUNKSHUN_DEF ($2, $3, $4)}
+    | FOUND_YR_T expression LINEBREAK_T{FOUND_YR $2}
     | expression LINEBREAK_T {EXP($1)}
 
 
@@ -101,6 +101,10 @@ expression:
     | MOD_OF_T expression AN_T expression {MOD_OF ($2,$4)}
     | BIGGR_OF_T expression AN_T expression {BIGGR_OF ($2,$4)}
     | SMALLR_OF_T expression AN_T expression {SMALLR_OF ($2,$4)}
+
+arglist:
+      YR_T IDENT_T LINEBREAK_T{[$2]}
+    | YR_T IDENT_T AN_T arglist {[$2] @ $4}
 
 infop_args:
       expression AN_T infop_args{[$1] @ $3}
